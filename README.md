@@ -69,7 +69,7 @@ This just formats the event as a plain python dictionary.
     notification = json.loads(notification_string)
     config = distiller.load_config(config_file_name)
 
-    d = distiller.Distiller(config, catchall=False)
+    dist = distiller.Distiller(config, catchall=False)
 
     #this is the default condenser.
     cond = condenser.DictionaryCondenser()
