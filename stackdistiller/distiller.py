@@ -105,7 +105,13 @@ class TraitDefinition(object):
         self.cfg = trait_cfg
         self.name = name
 
-        type_name = trait_cfg.get('type', 'text')
+        type_name = None
+        try:
+            type_name = trait_cfg.get('type', 'text')
+        except AttributeError as e:
+            raise EventDefinitionException(
+                    "Unable to get type for '%s'" % trait_cfg,
+                    self.cfg)
 
         if 'plugin' in trait_cfg:
             plugin_cfg = trait_cfg['plugin']

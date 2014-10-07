@@ -143,6 +143,14 @@ class TestTraitDefinition(DistillerTestBase):
         self.fake_plugin_map = dict(test=self.test_plugin_class,
                                     nothing=self.nothing_plugin_class)
 
+    def test_bad_field_definition(self):
+        cfg = "foo"
+        try:
+            distiller.TraitDefinition("test_trait", cfg, {})
+            self.fail()
+        except distiller.EventDefinitionException:
+            pass
+
     def test_to_trait_with_plugin(self):
         cfg = dict(type='text',
                    fields=['payload.instance_id', 'payload.instance_uuid'],
