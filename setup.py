@@ -13,7 +13,7 @@ install_reqs = [str(r.req) for r in parse_requirements(req_file)]
 
 setup(
     name='stackdistiller',
-    version='0.10',
+    version='0.11',
     author='Monsyne Dragon',
     author_email='mdragon@rackspace.com',
     description=("A data extraction and transformation library for "
@@ -28,7 +28,7 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
     ],
-    url='https://github.com/StackTach/stackdistiller',
+    url='https://github.com/stackforge/stacktach-stackdistiller',
     scripts=['bin/test-distiller.py'],
     long_description=read('README.md'),
     install_requires=install_reqs,
