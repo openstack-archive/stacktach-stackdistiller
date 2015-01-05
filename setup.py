@@ -1,15 +1,9 @@
 import os
-from pip.req import parse_requirements
 from setuptools import setup, find_packages
 
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
-
-req_file = os.path.join(os.path.dirname(__file__), "requirements.txt")
-install_reqs = [str(r.req) for r in parse_requirements(req_file)]
-
 
 setup(
     name='stackdistiller',
@@ -31,7 +25,13 @@ setup(
     url='https://github.com/stackforge/stacktach-stackdistiller',
     scripts=['bin/test-distiller.py'],
     long_description=read('README.md'),
-    install_requires=install_reqs,
+    install_requires=[
+        "enum34 >= 1.0",
+        "iso8601 >= 0.1.10",
+        "jsonpath-rw >= 1.2.0, < 2.0",
+        "PyYAML >= 3.1.0",
+        "six >= 1.5.2",
+    ],
 
     zip_safe=False
 )
