@@ -1,16 +1,15 @@
-stackdistiller
-==============
+# stackdistiller
 
 A data extraction and transformation library for OpenStack notifications.
 
 Stackdistiller is designed to extract data from openstack notifications
 and convert it into a form relevant to the application consuming the
 notification. It consists of two components, the Distiller, which extracts
-data from notifications according to a YAML config file, and the Condenser,
-which receives the data extracted by the Distiller, and formats it into
-an application-specific object, referred to as an Event. This could be a
-simple python dictionary, an XML document tree, or a set of ORM model
-objects.
+data from notifications according to a YAML [config file](doc/event_definitions_config.md),
+and the Condenser, which receives the data extracted by the Distiller,
+and formats it into an application-specific object, referred to as an Event.
+This could be a simple python dictionary, an XML document tree, or a set of
+ORM model objects.
 
 ## Distiller
 
