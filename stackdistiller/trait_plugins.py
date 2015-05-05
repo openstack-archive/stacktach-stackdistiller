@@ -2,8 +2,6 @@
 #
 # Copyright © 2013 Rackspace Hosting.
 #
-# Author: Monsyne Dragon <mdragon@rackspace.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -22,9 +20,7 @@ import six
 
 @six.add_metaclass(abc.ABCMeta)
 class TraitPluginBase(object):
-    """Base class for plugins that convert notification fields to
-       Trait values.
-    """
+    """Base class for plugins that convert notification fields to Traits"""
 
     def __init__(self, **kw):
         """Setup the trait plugin.

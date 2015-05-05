@@ -3,8 +3,6 @@
 #
 # Copyright © 2014 Rackspace Hosting.
 #
-# Author: Monsyne Dragon <mdragon@rackspace.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -27,8 +25,8 @@ import argparse
 import json
 import sys
 
-from stackdistiller import distiller
 from stackdistiller import condenser
+from stackdistiller import distiller
 
 
 class TestCondenser(condenser.CondenserBase):
@@ -81,27 +79,31 @@ def test_data(args):
                 yield n
 
 
-parser = argparse.ArgumentParser(description="Test Distiller configuration")
-parser.add_argument('-c', '--config',
-                    default='event_definitions.yaml',
-                    help='Name of event definitions file '
-                         'to test (Default: %(default)s)')
-parser.add_argument('-l', '--list', action='store_true',
-                    help='Test data files contain JSON list of notifications.'
-                    ' (By default data files should contain a single '
-                    'notification.)')
-parser.add_argument('-d', '--add_default_definition', action='store_true',
-                    help='Add default event definition. Normally, '
-                    'notifications are dropped if there is no event '
-                    'definition for their event_type. Setting this adds a '
-                    '"catchall" that converts unknown notifications to Events'
-                    ' with a few basic traits.')
-parser.add_argument('-o', '--output',  type=argparse.FileType('w'),
+parser = argparse.ArgumentParser(
+    description="Test Distiller configuration")
+parser.add_argument(
+    '-c', '--config',
+    default='event_definitions.yaml',
+    help='Name of event definitions file '
+         'to test (Default: %(default)s)')
+parser.add_argument(
+    '-l', '--list', action='store_true',
+    help='Test data files contain JSON list of notifications.'
+         ' (By default data files should contain a single '
+         'notification.)')
+parser.add_argument(
+    '-d', '--add_default_definition', action='store_true',
+    help='Add default event definition. Normally, '
+         'notifications are dropped if there is no event '
+         'definition for their event_type. Setting this adds a '
+         '"catchall" that converts unknown notifications to Events'
+         ' with a few basic traits.')
+parser.add_argument('-o', '--output', type=argparse.FileType('w'),
                     default=sys.stdout, help="Output file. Default stdout")
-parser.add_argument('test_data', nargs='*', metavar='JSON_FILE',
-                    help="Test notifications in JSON format. Defaults to stdin")
+parser.add_argument(
+    'test_data', nargs='*', metavar='JSON_FILE',
+    help="Test notifications in JSON format. Defaults to stdin")
 args = parser.parse_args()
-
 
 config = distiller.load_config(args.config)
 
@@ -115,7 +117,7 @@ drops = 0
 cond = TestCondenser()
 for notification in notifications:
     cond.clear()
-    nct +=1
+    nct += 1
     if dist.to_event(notification, cond) is None:
         out.write("Dropped notification: %s\n" %
                   notification['message_id'])

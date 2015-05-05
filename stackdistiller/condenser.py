@@ -2,8 +2,6 @@
 #
 # Copyright © 2014 Rackspace Hosting.
 #
-# Author: Monsyne Dragon <mdragon@rackspace.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -22,18 +20,23 @@ import six
 
 @six.add_metaclass(abc.ABCMeta)
 class CondenserBase(object):
-    """Base class for Condenser objects that collect data extracted from a
-       Notification by the Distiller, and format it into a usefull datastructure.
+    """Base class for Condenser objects
 
-       A simple Condenser may just colect all the traits received into a dictionary.
-       More complex ones may build collections of application or ORM model objects,
-       or XML document trees.
+     Collect data extracted from a Notification by the Distiller, and
+     format it into a useful data structure.
 
-       Condensers also have hooks for verification logic, to check that all needed
-       traits are present."""
+     A simple Condenser may just colect all the traits received into
+     a dictionary. More complex ones may build collections of application
+     or ORM model objects, or XML document trees.
+
+     Condensers also have hooks for verification logic, to check that
+     all needed traits are present.
+     """
 
     def __init__(self, **kw):
-        """Setup the condenser. A new instance of the condenser is passed to the
+        """Set up the condenser.
+
+        A new instance of the condenser is passed to the
         distiller for each notification extracted.
 
         :param kw: keyword parameters for condenser.
@@ -43,7 +46,9 @@ class CondenserBase(object):
 
     @abc.abstractmethod
     def add_trait(self, name, trait_type, value):
-        """Add a trait to the Event datastructure being built by this
+        """Add a trait
+
+        Add a trait to the Event data structure being built by this
         condenser. The distiller will call this for each extracted trait.
 
         :param name: (string) name of the trait
@@ -54,7 +59,9 @@ class CondenserBase(object):
 
     @abc.abstractmethod
     def add_envelope_info(self, event_type, message_id, when):
-        """Add the metadata for this event, extracted from the notification's
+        """Add the metadata for this event
+
+        Add metadata extracted from the notification's
         envelope. The distiller will call this once.
 
         :param event_type: (string) Type of event, as a dotted string such as
@@ -66,14 +73,14 @@ class CondenserBase(object):
 
     @abc.abstractmethod
     def get_event(self):
-        """Return the Event datastructure constructed by this condenser."""
+        """Return the Event data structure constructed by this condenser."""
 
     @abc.abstractmethod
     def clear(self):
         """Clear condenser state."""
 
     def validate(self):
-        """Check Event against whatever validation logic this condenser may have
+        """Check Event against whatever validation logic this condenser has
 
         :returns:   (bool) True if valid.
 
@@ -83,6 +90,7 @@ class CondenserBase(object):
 
 class DictionaryCondenser(CondenserBase):
     """Return event data as a simple python dictionary"""
+
     def __init__(self, **kw):
         self.clear()
         super(DictionaryCondenser, self).__init__(**kw)
