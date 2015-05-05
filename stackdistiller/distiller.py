@@ -2,8 +2,6 @@
 #
 # Copyright © 2013 Rackspace Hosting.
 #
-# Author: Monsyne Dragon <mdragon@rackspace.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -20,7 +18,6 @@ import collections
 import datetime
 import fnmatch
 import logging
-import os
 
 from enum import Enum
 import iso8601
@@ -60,13 +57,13 @@ def load_config(filename):
         if hasattr(err, 'problem_mark'):
             mark = err.problem_mark
             errmsg = ("Invalid YAML syntax in Event Definitions file "
-                        "%(file)s at line: %(line)s, column: %(column)s."
+                      "%(file)s at line: %(line)s, column: %(column)s."
                       % dict(file=filename,
                              line=mark.line + 1,
                              column=mark.column + 1))
         else:
             errmsg = ("YAML error reading Event Definitions file "
-                        "%(file)s"
+                      "%(file)s"
                       % dict(file=filename))
         logger.error(errmsg)
         raise
@@ -100,7 +97,6 @@ Trait = collections.namedtuple('Trait', ('name', 'trait_type', 'value'))
 
 
 class TraitDefinition(object):
-
     def __init__(self, name, trait_cfg, plugin_map):
         self.cfg = trait_cfg
         self.name = name
@@ -110,8 +106,8 @@ class TraitDefinition(object):
             type_name = trait_cfg.get('type', 'text')
         except AttributeError as e:
             raise EventDefinitionException(
-                    "Unable to get type for '%s'" % trait_cfg,
-                    self.cfg)
+                "Unable to get type for '%s'" % trait_cfg,
+                self.cfg)
 
         if 'plugin' in trait_cfg:
             plugin_cfg = trait_cfg['plugin']
@@ -124,7 +120,7 @@ class TraitDefinition(object):
                 except KeyError:
                     raise EventDefinitionException(
                         'Plugin specified, but no plugin name supplied for '
-                          'trait %s' % name, self.cfg)
+                        'trait %s' % name, self.cfg)
                 plugin_params = plugin_cfg.get('parameters')
                 if plugin_params is None:
                     plugin_params = {}
@@ -133,8 +129,8 @@ class TraitDefinition(object):
             except KeyError:
                 raise EventDefinitionException(
                     'No plugin named %(plugin)s available for '
-                      'trait %(trait)s' % dict(plugin=plugin_name,
-                                                trait=name), self.cfg)
+                    'trait %(trait)s' % dict(plugin=plugin_name,
+                                             trait=name), self.cfg)
             self.plugin = plugin_class(**plugin_params)
         else:
             self.plugin = None
@@ -142,7 +138,7 @@ class TraitDefinition(object):
         if 'fields' not in trait_cfg:
             raise EventDefinitionException(
                 "Required field in trait definition not specified: "
-                  "'%s'" % 'fields',
+                "'%s'" % 'fields',
                 self.cfg)
 
         fields = trait_cfg['fields']
@@ -157,7 +153,7 @@ class TraitDefinition(object):
         except Exception as e:
             raise EventDefinitionException(
                 "Parse error in JSONPath specification "
-                  "'%(jsonpath)s' for %(trait)s: %(err)s"
+                "'%(jsonpath)s' for %(trait)s: %(err)s"
                 % dict(jsonpath=fields, trait=name, err=e), self.cfg)
         try:
             self.trait_type = Datatype[type_name]
@@ -196,7 +192,6 @@ class TraitDefinition(object):
 
 
 class EventDefinition(object):
-
     DEFAULT_TRAITS = dict(
         service=dict(type='text', fields='publisher_id'),
         request_id=dict(type='text', fields='_context_request_id'),
@@ -262,8 +257,8 @@ class EventDefinition(object):
 
     @staticmethod
     def _extract_when(body):
-        """Extract the generated datetime from the notification.
-        """
+        """Extract the generated datetime from the notification."""
+
         # NOTE: I am keeping the logic the same as it was in openstack
         # code, However, *ALL* notifications should have a 'timestamp'
         # field, it's part of the notification envelope spec. If this was

@@ -2,13 +2,11 @@
 #
 # Copyright © 2013 Rackspace Hosting.
 #
-# Author: Monsyne Dragon <mdragon@rackspace.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -18,7 +16,7 @@
 
 import datetime
 
-#for Python2.6 compatability.
+# for Python2.6 compatability.
 import unittest2 as unittest
 
 import iso8601
@@ -50,13 +48,14 @@ class TestCondenser(object):
 
 class DistillerTestBase(unittest.TestCase):
     def _create_test_notification(self, event_type, message_id, **kw):
-        return dict(event_type=event_type,
-                    message_id=message_id,
-                    priority="INFO",
-                    publisher_id="compute.host-1-2-3",
-                    timestamp="2013-08-08 21:06:37.803826",
-                    payload=kw,
-                    )
+        return dict(
+            event_type=event_type,
+            message_id=message_id,
+            priority="INFO",
+            publisher_id="compute.host-1-2-3",
+            timestamp="2013-08-08 21:06:37.803826",
+            payload=kw,
+        )
 
     def assertIsValidEvent(self, event, notification):
         self.assertIsNot(
@@ -113,7 +112,6 @@ class DistillerTestBase(unittest.TestCase):
 
 
 class TestTraitDefinition(DistillerTestBase):
-
     def setUp(self):
         super(TestTraitDefinition, self).setUp()
         self.n1 = self._create_test_notification(
@@ -126,8 +124,8 @@ class TestTraitDefinition(DistillerTestBase):
             host='host-1-2-3',
             bogus_date='',
             image_meta=dict(
-                        disk_gb='20',
-                        thing='whatzit'),
+                disk_gb='20',
+                thing='whatzit'),
             foobar=50)
 
         self.test_plugin_class = mock.MagicMock(name='mock_test_plugin')
@@ -244,14 +242,14 @@ class TestTraitDefinition(DistillerTestBase):
 
     def test_to_trait_multiple_different_nesting(self):
         cfg = dict(type='int', fields=['payload.foobar',
-                   'payload.image_meta.disk_gb'])
+                                       'payload.image_meta.disk_gb'])
         tdef = distiller.TraitDefinition('test_trait', cfg,
                                          self.fake_plugin_map)
         t = tdef.to_trait(self.n1)
         self.assertEqual(50, t.value)
 
         cfg = dict(type='int', fields=['payload.image_meta.disk_gb',
-                   'payload.foobar'])
+                                       'payload.foobar'])
         tdef = distiller.TraitDefinition('test_trait', cfg,
                                          self.fake_plugin_map)
         t = tdef.to_trait(self.n1)
@@ -322,7 +320,7 @@ class TestTraitDefinition(DistillerTestBase):
             jsonpath_rw.parse('(payload.test)|(payload.other)'))
 
     def test_invalid_path_config(self):
-        #test invalid jsonpath...
+        # test invalid jsonpath...
         cfg = dict(fields='payload.bogus(')
         self.assertRaises(distiller.EventDefinitionException,
                           distiller.TraitDefinition,
@@ -331,7 +329,7 @@ class TestTraitDefinition(DistillerTestBase):
                           self.fake_plugin_map)
 
     def test_invalid_plugin_config(self):
-        #test invalid jsonpath...
+        # test invalid jsonpath...
         cfg = dict(fields='payload.test', plugin=dict(bogus="true"))
         self.assertRaises(distiller.EventDefinitionException,
                           distiller.TraitDefinition,
@@ -340,7 +338,7 @@ class TestTraitDefinition(DistillerTestBase):
                           self.fake_plugin_map)
 
     def test_unknown_plugin(self):
-        #test invalid jsonpath...
+        # test invalid jsonpath...
         cfg = dict(fields='payload.test', plugin=dict(name='bogus'))
         self.assertRaises(distiller.EventDefinitionException,
                           distiller.TraitDefinition,
@@ -366,7 +364,7 @@ class TestTraitDefinition(DistillerTestBase):
         self.assertEqual(distiller.Datatype.datetime, t.trait_type)
 
     def test_invalid_type_config(self):
-        #test invalid jsonpath...
+        # test invalid jsonpath...
         cfg = dict(type='bogus', fields='payload.test')
         self.assertRaises(distiller.EventDefinitionException,
                           distiller.TraitDefinition,
@@ -376,7 +374,6 @@ class TestTraitDefinition(DistillerTestBase):
 
 
 class TestEventDefinition(DistillerTestBase):
-
     def setUp(self):
         super(TestEventDefinition, self).setUp()
 
@@ -419,11 +416,13 @@ class TestEventDefinition(DistillerTestBase):
         e = edef.to_event(self.test_notification1, self.condenser)
         self.assertTrue(e is self.condenser)
         self.assertEqual('test.thing', e.event_type)
-        self.assertEqual(datetime.datetime(2013, 8, 8, 21, 6, 37, 803826, iso8601.iso8601.UTC),
+        self.assertEqual(datetime.datetime(2013, 8, 8, 21, 6, 37, 803826,
+                                           iso8601.iso8601.UTC),
                          e.when)
 
         self.assertHasDefaultTraits(e)
-        self.assertHasTrait(e, 'host', value='host-1-2-3', trait_type=trait_type)
+        self.assertHasTrait(e, 'host', value='host-1-2-3',
+                            trait_type=trait_type)
         self.assertHasTrait(e, 'instance_id',
                             value='uuid-for-instance-0001',
                             trait_type=trait_type)
@@ -609,24 +608,25 @@ class TestEventDefinition(DistillerTestBase):
 
 
 class TestDistiller(DistillerTestBase):
-
     def setUp(self):
         super(TestDistiller, self).setUp()
 
-        self.valid_event_def1 = [{
-            'event_type': 'compute.instance.create.*',
-            'traits': {
-                'instance_id': {
-                    'type': 'text',
-                    'fields': ['payload.instance_uuid',
-                               'payload.instance_id'],
+        self.valid_event_def1 = [
+            {
+                'event_type': 'compute.instance.create.*',
+                'traits': {
+                    'instance_id': {
+                        'type': 'text',
+                        'fields': ['payload.instance_uuid',
+                                   'payload.instance_id'],
+                    },
+                    'host': {
+                        'type': 'text',
+                        'fields': 'payload.host',
+                    },
                 },
-                'host': {
-                    'type': 'text',
-                    'fields': 'payload.host',
-                },
-            },
-        }]
+            }
+        ]
 
         self.test_notification1 = self._create_test_notification(
             "compute.instance.create.start",
@@ -645,10 +645,7 @@ class TestDistiller(DistillerTestBase):
         # test a malformed notification
         now = datetime.datetime.utcnow().replace(tzinfo=iso8601.iso8601.UTC)
         mock_utcnow.return_value = now
-        c = distiller.Distiller(
-            [],
-            self.fake_plugin_map,
-            catchall=True)
+        c = distiller.Distiller([], self.fake_plugin_map, catchall=True)
         message = {'event_type': "foo",
                    'message_id': "abc",
                    'publisher_id': "1"}
@@ -674,7 +671,8 @@ class TestDistiller(DistillerTestBase):
         e = c.to_event(self.test_notification2, TestCondenser())
         self.assertIsValidEvent(e, self.test_notification2)
         self.assertEqual(1, len(e.traits),
-            "Wrong number of traits %s: %s" % (len(e.traits), e.traits))
+                         "Wrong number of traits %s: %s" % (
+                             len(e.traits), e.traits))
         self.assertHasDefaultTraits(e)
         self.assertDoesNotHaveTrait(e, 'instance_id')
         self.assertDoesNotHaveTrait(e, 'host')
@@ -696,10 +694,7 @@ class TestDistiller(DistillerTestBase):
         self.assertIsNotValidEvent(e, self.test_notification2)
 
     def test_distiller_empty_cfg_with_catchall(self):
-        c = distiller.Distiller(
-            [],
-            self.fake_plugin_map,
-            catchall=True)
+        c = distiller.Distiller([], self.fake_plugin_map, catchall=True)
         self.assertEqual(1, len(c.definitions))
         e = c.to_event(self.test_notification1, TestCondenser())
         self.assertIsValidEvent(e, self.test_notification1)
@@ -712,10 +707,7 @@ class TestDistiller(DistillerTestBase):
         self.assertHasDefaultTraits(e)
 
     def test_distiller_empty_cfg_without_catchall(self):
-        c = distiller.Distiller(
-            [],
-            self.fake_plugin_map,
-            catchall=False)
+        c = distiller.Distiller([], self.fake_plugin_map, catchall=False)
         self.assertEqual(0, len(c.definitions))
         e = c.to_event(self.test_notification1, TestCondenser())
         self.assertIsNotValidEvent(e, self.test_notification1)

@@ -2,8 +2,6 @@
 #
 # Copyright © 2013 Rackspace Hosting.
 #
-# Author: Monsyne Dragon <mdragon@rackspace.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -16,14 +14,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-#for Python2.6 compatability.
+# for Python2.6 compatability.
 import unittest2 as unittest
 
 from stackdistiller import trait_plugins
 
 
 class TestSplitterPlugin(unittest.TestCase):
-
     def setUp(self):
         super(TestSplitterPlugin, self).setUp()
         self.pclass = trait_plugins.SplitterTraitPlugin
@@ -70,7 +67,6 @@ class TestSplitterPlugin(unittest.TestCase):
 
 
 class TestBitfieldPlugin(unittest.TestCase):
-
     def setUp(self):
         super(TestBitfieldPlugin, self).setUp()
         self.pclass = trait_plugins.BitfieldTraitPlugin
